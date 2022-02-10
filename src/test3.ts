@@ -1,3 +1,3 @@
-// import { BasicControlPanel2 } from './test2';
-// BasicControlPanel2
+ import { BasicControlPanel2 } from './test2';
+ BasicControlPanel2
 
