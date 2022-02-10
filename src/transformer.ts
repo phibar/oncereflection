@@ -14,7 +14,7 @@ export default function myTransformerPlugin(program: ts.Program, opts: MyPluginO
                 console.log("myTransformer", sourceFile.fileName)
                 function visitor(node: ts.Node): ts.Node {
 
-                    console.log("  Node", ts.SyntaxKind[node.kind])
+                    console.log("  Node", ts.SyntaxKind[node.kind], sourceFile.text.substring(node.pos,node.end).replace('\n',''))
                     if (ts.isCallExpression(node) && node.expression.getText() === 'safely') {
                         const target = node.arguments[0]
                         if (ts.isPropertyAccessExpression(target)) {
