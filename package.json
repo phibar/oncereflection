@@ -5,7 +5,14 @@
   "type": "module",
   "main": "dist/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepare": "ts-patch install",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc:clean": "rimraf dist",
+    "tsc:transformer": "npm-run-all tsc:transformer:build tsc:rename",
+    "tsc:transformer:build": "tsc -p tsconfig.transformer.json",
+    "tsc:rename": "mv dist/transformer.js dist/transformer.cjs ",
+    "tsc:esm": "tsc",
+    "tsc": "npm-run-all tsc:clean tsc:transformer tsc:esm"
   },
   "repository": {
     "type": "git",
@@ -19,12 +26,12 @@
   "homepage": "https://github.com/phibar/oncereflection#readme",
   "devDependencies": {
     "@types/node": "^17.0.6",
-    "fs": "^0.0.1-security",
-    "ts-node": "^10.4.0",
-    "ttypescript": "^1.5.13",
     "typescript": "^4.5.4"
   },
   "dependencies": {
-    "reflect-metadata": "github:rbuckton/reflect-metadata"
+    "npm-run-all": "^4.1.5",
+    "reflect-metadata": "github:rbuckton/reflect-metadata",
+    "rimraf": "^3.0.2",
+    "ts-patch": "^2.0.1"
   }
 }
