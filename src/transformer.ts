@@ -7,20 +7,20 @@ export interface MyPluginOptions {
 }
 
 function checkClassDeclaration(tsClass: TSTypes.ClassDeclaration) {
-    console.log("tsClass.heritageClauses")
+    console.log("=================================================")
+    console.log("class",tsClass.name?.text)
+    console.log("  implements")
     tsClass.heritageClauses && checkHeritageClause(tsClass.heritageClauses);
-    // tsClass.decorators = []
+
 }
 
 function checkHeritageClause(tsHeritage: TSTypes.NodeArray<TSTypes.HeritageClause>) {
     tsHeritage.forEach(element => {
         console.log(element.getText())
         element.types.forEach( (type: TSTypes.ExpressionWithTypeArguments)  => 
-            console.log("Interface:",(type.expression as TSTypes.Identifier).text)
+            console.log("    Interface:",(type.expression as TSTypes.Identifier).text)
         )
     });
-
-    // tsClass.decorators = []
 }
 
 
@@ -36,17 +36,18 @@ export default function myTransformerPlugin(program: ts.Program, opts: MyPluginO
 
                     console.log("  Node", ts.SyntaxKind[node.kind], sourceFile.text.substring(node.pos,node.end).replace('\n',''))
                     
-                    if (ts.isCallExpression(node) && node.expression.getText() === 'safely') {
-                        const target = node.arguments[0]
-                        if (ts.isPropertyAccessExpression(target)) {
-                            return ts.createBinary(
-                                target.expression,
-                                ts.SyntaxKind.AmpersandAmpersandToken,
-                                target
-                            )
-                        }
-                    }
+                    // if (ts.isCallExpression(node) && node.expression.getText() === 'safely') {
+                    //     const target = node.arguments[0]
+                    //     if (ts.isPropertyAccessExpression(target)) {
+                    //         return ts.createBinary(
+                    //             target.expression,
+                    //             ts.SyntaxKind.AmpersandAmpersandToken,
+                    //             target
+                    //         )
+                    //     }
+                    // }
                     if (ts.isClassDeclaration(node)) {
+
                         checkClassDeclaration(node);
 
                     }
