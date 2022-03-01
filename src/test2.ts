@@ -20,6 +20,7 @@ class Namespace {
     static register<T extends Constructor<I>, I>(ctor: T) {
         console.log("META", ctor.name, Reflect.getMetadataKeys(ctor))
         Namespace.implementations.push(ctor);
+        //Reflect.defineMetadata()
         return ctor
     }
 

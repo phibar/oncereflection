@@ -2,6 +2,7 @@ import * as ts from 'typescript';
 import * as TSTypes from 'typescript';
 
 
+
 export interface MyPluginOptions {
     some?: string
 }
@@ -12,6 +13,7 @@ function checkClassDeclaration(tsClass: TSTypes.ClassDeclaration) {
     console.log("  implements")
     tsClass.heritageClauses && checkHeritageClause(tsClass.heritageClauses);
 
+
 }
 
 function checkHeritageClause(tsHeritage: TSTypes.NodeArray<TSTypes.HeritageClause>) {
@@ -19,6 +21,8 @@ function checkHeritageClause(tsHeritage: TSTypes.NodeArray<TSTypes.HeritageClaus
         console.log(element.getText())
         element.types.forEach( (type: TSTypes.ExpressionWithTypeArguments)  => 
             console.log("    Interface:",(type.expression as TSTypes.Identifier).text)
+
+            //ts.addEmitHelper()
         )
     });
 }
@@ -35,7 +39,7 @@ export default function myTransformerPlugin(program: ts.Program, opts: MyPluginO
                 function visitor(node: ts.Node): ts.Node {
 
                     console.log("  Node", ts.SyntaxKind[node.kind], sourceFile.text.substring(node.pos,node.end).replace('\n',''))
-                    
+
                     // if (ts.isCallExpression(node) && node.expression.getText() === 'safely') {
                     //     const target = node.arguments[0]
                     //     if (ts.isPropertyAccessExpression(target)) {
@@ -47,7 +51,7 @@ export default function myTransformerPlugin(program: ts.Program, opts: MyPluginO
                     //     }
                     // }
                     if (ts.isClassDeclaration(node)) {
-
+                        //const allDecorators = ts.getAllDecoratorsOfClassElement(node, member);
                         checkClassDeclaration(node);
 
                     }
