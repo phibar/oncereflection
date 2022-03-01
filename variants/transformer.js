@@ -1,0 +1,58 @@
+import * as ts from 'typescript';
+function checkClassDeclaration(tsClass) {
+    console.log("=================================================");
+    console.log("class", tsClass.name?.text);
+    console.log("  implements");
+    tsClass.heritageClauses && checkHeritageClause(tsClass.heritageClauses);
+}
+function checkHeritageClause(tsHeritage) {
+    tsHeritage.forEach(element => {
+        console.log(element.getText());
+        element.types.forEach((type) => console.log("    Interface:", type.expression.text)
+        //ts.addEmitHelper()
+        );
+    });
+}
+export default function myTransformerPlugin(program, opts) {
+    return {
+        before(ctx) {
+            console.log("bar");
+            //throw "foo"
+            return (sourceFile) => {
+                console.log("myTransformer", sourceFile.fileName);
+                function visitor(node) {
+                    console.log("  Node", ts.SyntaxKind[node.kind], sourceFile.text.substring(node.pos, node.end).replace('\n', ''));
+                    // if (ts.isCallExpression(node) && node.expression.getText() === 'safely') {
+                    //     const target = node.arguments[0]
+                    //     if (ts.isPropertyAccessExpression(target)) {
+                    //         return ts.createBinary(
+                    //             target.expression,
+                    //             ts.SyntaxKind.AmpersandAmpersandToken,
+                    //             target
+                    //         )
+                    //     }
+                    // }
+                    if (ts.isClassDeclaration(node)) {
+                        //const allDecorators = ts.getAllDecoratorsOfClassElement(node, member);
+                        checkClassDeclaration(node);
+                    }
+                    return ts.visitEachChild(node, visitor, ctx);
+                }
+                return ts.visitEachChild(sourceFile, visitor, ctx);
+            };
+        }
+    };
+}
+// ts.js 1304 write Reflect metaData __decorators
+// ts.js 4
+// function getKindNamesForApi() {
+//     // some SyntaxKinds are repeated, so only use the first one
+//     const kindNames: { [kind: number]: string } = {};
+//     for (const name of Object.keys(ts.SyntaxKind).filter(k => isNaN(parseInt(k, 10)))) {
+//       const value = (ts.SyntaxKind as any)[name] as number;
+//       if (kindNames[value] == null) {
+//         kindNames[value] = name;
+//       }
+//     }
+//     return kindNames;
+//   }

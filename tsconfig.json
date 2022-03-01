@@ -94,12 +94,12 @@
     ],
     "plugins": [
       {
-        "transform": "./dist/transformer.cjs",
+        "transform": "./dist/transformer.cjs", "type":"raw",
       }
     ]
   },
   "exclude": [
-    "./varants/*.ts",
-    "./src/transformer.ts"
+    "./variants/*.ts",
+    "src/transformer.ts.bak"
   ]
 }
